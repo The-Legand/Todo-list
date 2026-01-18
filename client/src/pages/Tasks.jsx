@@ -36,6 +36,18 @@ export default function Tasks() {
     fetchData();
   }, []);
 
+  const deleteTask = async(id)=>{
+    console.log(id)
+    try{
+    const response = await fetch(`http://localhost:4000/api/tasks/delete/${id}`,{
+        method:"DELETE",
+    })
+}
+catch(e){
+    console.error(e)
+}
+  }
+
   if (status === "loading") return <p>Loading</p>;
   if (status === "error") return <p>Error</p>;
   return (
@@ -52,7 +64,7 @@ export default function Tasks() {
         <TableBody>
           {tasks.map((task) => (
             <TableRow
-              key={task.id}
+              key={task._id}
               
             >
               <TableCell component="th" >
@@ -61,7 +73,7 @@ export default function Tasks() {
               <TableCell align="right">{task.priority}</TableCell>
               <TableCell align="right">{new Date(task.createdAt).toLocaleString()}</TableCell>
               <TableCell align="right" >
-              <Button variant="outlined" startIcon={<DeleteIcon/>}>
+              <Button  onClick={()=>deleteTask(task._id)} variant="outlined" startIcon={<DeleteIcon/>}>
                 DELETE
               </Button>
               <Button variant="outlined" startIcon={<EditIcon/>}
