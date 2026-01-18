@@ -1,4 +1,8 @@
 import { useForm } from "react-hook-form";
+import Map from 'ol/Map.js';
+import OSM from 'ol/source/OSM.js'
+import ImageLayer from 'ol/layer/Image.js'
+import View from 'ol/View.js'
 
 export default function NewTask() {
   const {
@@ -6,6 +10,20 @@ export default function NewTask() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  
+  const map = new Map({
+    target:'map',
+    layers:[
+        new ImageLayer({
+            source: new OSM(),
+        }),
+    ],
+    view: new View({
+        center:[0,0],
+        zoom:2,
+    })
+})
 
   async function createTask(data) {
     try {
@@ -44,7 +62,7 @@ export default function NewTask() {
           />
           <p className="errors">{errors.name?.message}</p>
         </label>
-        <label>priority</label>
+        <label>priority
         <select
           id="priority"
           defaultValue=""
@@ -63,12 +81,14 @@ export default function NewTask() {
           <option value={4}>4</option>
           <option value={5}>5</option>
         </select>
+        </label>
         <span className="errors">{errors.priority?.message}</span>
 
-        <div id="map" style="width: 100%; height: 400px"></div>
-
+        {/* <div id="map" ></div> */}
         <button type="submit">Submit</button>
       </form>
+        
+
     </>
   );
 }
