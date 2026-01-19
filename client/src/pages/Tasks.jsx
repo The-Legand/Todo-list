@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState, Suspense } from "react";
+import {useAtomValue, useSetAtom} from "jotai";
+import {tasksAtom, triggerTaskRefreshAtom} from "../helpers/atoms";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,52 +14,28 @@ import EditIcon from "@mui/icons-material/Edit";
 import Stack from "@mui/material/Stack"
 import NewTaskButton from "../components/NewTaskButton";
 
-
-export default function Tasks() {
-  const [tasks, setTasks] = useState([]);
-  const [status, setStatus] = useState("loading");
-
-  console.log("this is tasks: ", tasks);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/");
-        if (!response.ok) {
-          throw new Error(`error. status: ${response.status}`);
-        }
-        const result = await response.json();
-
-        setTasks(result);
-        setStatus("ready");
-      } catch (err) {
-        console.error("error:", err);
-        setStatus("error");
-      }
-    };
-    fetchData();
-  }, []);
-
-  const deleteTask = async(id)=>{
-    console.log(id)
+function TasksList(){
+    const tasks = useAtomValue(tasksAtom)
+    const refreshTasks = useSetAtom(triggerTaskRefreshAtom);
+    const deleteTask = async(id)=>{
     try{
     const response = await fetch(`http://localhost:4000/api/tasks/delete/${id}`,{
         method:"DELETE",
     })
+    if (!response.ok) throw new Error("Delete failed");
+    refreshTasks();
+   
 }
 catch(e){
     console.error(e)
 }
-  }
+}
 
-  if (status === "loading") return <p>Loading</p>;
-  if (status === "error") return <p>Error</p>;
-  return (
+return (
     <>
-        <div className="todoapp stack-largs">
+        <div className="todoapp">
       <h1>Task List</h1>
       <NewTaskButton/>
-      {/* <NewTask></NewTask> */}
     </div>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -97,4 +75,13 @@ catch(e){
     </TableContainer>
     </>
   );
+}
+
+export default function Tasks() {
+    return(
+    <Suspense fallback={<p>Loading tasks...</p>}>
+        <TasksList/>
+    </Suspense>
+  
+    )
 }
