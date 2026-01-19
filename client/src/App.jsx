@@ -1,13 +1,18 @@
 import NewTask from "./pages/NewTask";
 import Tasks from './pages/Tasks'
-
+import NewTaskButton from "./components/NewTaskButton";
+import {createBrowserRouter, Routes, Route, BrowserRouter} from "react-router-dom";
 function App() {
   return (
-    <div className="todoapp stack-largs">
-      <h1>Task List</h1>
-    <Tasks></Tasks>
-      {/* <NewTask></NewTask> */}
-    </div>
+    <>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Tasks/>}/>
+      <Route path="/new-task" element={<NewTask/>}/>
+    </Routes>
+    </BrowserRouter>
+
+    </>
   )
 }
 

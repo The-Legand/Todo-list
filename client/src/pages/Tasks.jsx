@@ -9,6 +9,8 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button"
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Stack from "@mui/material/Stack"
+import NewTaskButton from "../components/NewTaskButton";
 
 
 export default function Tasks() {
@@ -51,6 +53,12 @@ catch(e){
   if (status === "loading") return <p>Loading</p>;
   if (status === "error") return <p>Error</p>;
   return (
+    <>
+        <div className="todoapp stack-largs">
+      <h1>Task List</h1>
+      <NewTaskButton/>
+      {/* <NewTask></NewTask> */}
+    </div>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
         <TableHead>
@@ -58,7 +66,7 @@ catch(e){
             <TableCell>Task name</TableCell>
             <TableCell align="right">Priority</TableCell>
             <TableCell align="right">Created on</TableCell>
-             <TableCell align="right">Action on</TableCell>
+             <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,16 +81,20 @@ catch(e){
               <TableCell align="right">{task.priority}</TableCell>
               <TableCell align="right">{new Date(task.createdAt).toLocaleString()}</TableCell>
               <TableCell align="right" >
+              <Stack spacing={2}  >
+              
+              <Button variant="outlined" startIcon={<EditIcon/>}
+              >Edit</Button>
               <Button  onClick={()=>deleteTask(task._id)} variant="outlined" startIcon={<DeleteIcon/>}>
                 DELETE
               </Button>
-              <Button variant="outlined" startIcon={<EditIcon/>}
-              >Edit</Button>
+              </Stack>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 }

@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form";
-import Map from 'ol/Map.js';
-import OSM from 'ol/source/OSM.js'
-import ImageLayer from 'ol/layer/Image.js'
-import View from 'ol/View.js'
-
+import MapView from "../components/MapView"
+import TextField from "@mui/material/TextField";
+import {useState} from 'react'
 export default function NewTask() {
   const {
     register,
@@ -11,19 +9,8 @@ export default function NewTask() {
     formState: { errors },
   } = useForm();
 
+  const [clickedCoordinates, setClickedCoordinates] = useState(null);
   
-  const map = new Map({
-    target:'map',
-    layers:[
-        new ImageLayer({
-            source: new OSM(),
-        }),
-    ],
-    view: new View({
-        center:[0,0],
-        zoom:2,
-    })
-})
 
   async function createTask(data) {
     try {
@@ -36,7 +23,7 @@ export default function NewTask() {
           ...data,
           position: {
             type: "Point",
-            coordinates: [35, 42],
+            coordinates: clickedCoordinates,
           },
         }),
       });
@@ -48,10 +35,10 @@ export default function NewTask() {
   return (
     <>
       <form onSubmit={handleSubmit(createTask)}>
-        <label>
-          Task name
-          <input
-            className="form fields"
+        
+          <TextField
+            className="form-fields"
+            label="Task name"
             {...register("name", {
               minLength: {
                 value: 4,
@@ -61,7 +48,6 @@ export default function NewTask() {
             })}
           />
           <p className="errors">{errors.name?.message}</p>
-        </label>
         <label>priority
         <select
           id="priority"
@@ -85,9 +71,11 @@ export default function NewTask() {
         <span className="errors">{errors.priority?.message}</span>
 
         {/* <div id="map" ></div> */}
-        <button type="submit">Submit</button>
-      </form>
         
+        <button type="submit">Submit</button>
+      <MapView onMapClick={setClickedCoordinates}/>
+      </form>
+
 
     </>
   );
