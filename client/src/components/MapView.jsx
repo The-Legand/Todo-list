@@ -48,7 +48,7 @@ function MapView({onMapClick}) {
 
 
 return <div point={clickedCoordinates}
- ref={mapDivRef} style={{width: "70%", height: "300px"}}/>;
+ ref={mapDivRef} style={{width: "90%", height: "300px"}}/>;
 
 
 }

@@ -12,10 +12,15 @@ import Button from "@mui/material/Button"
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Stack from "@mui/material/Stack"
-import NewTaskButton from "../components/NewTaskButton";
+import TaskDialog from '../components/TaskDialog'
+import TaskEdit from '../components/TaskEdit'
+
+
 
 function TasksList(){
     const tasks = useAtomValue(tasksAtom)
+   
+
     const refreshTasks = useSetAtom(triggerTaskRefreshAtom);
     const deleteTask = async(id)=>{
     try{
@@ -33,9 +38,9 @@ catch(e){
 
 return (
     <>
-        <div className="todoapp">
+    <div className="todoapp">
       <h1>Task List</h1>
-      <NewTaskButton/>
+      <TaskDialog/>
     </div>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -61,8 +66,7 @@ return (
               <TableCell align="right" >
               <Stack spacing={2}  >
               
-              <Button variant="outlined" startIcon={<EditIcon/>}
-              >Edit</Button>
+              <TaskEdit taskId={task._id}/>
               <Button  onClick={()=>deleteTask(task._id)} variant="outlined" startIcon={<DeleteIcon/>}>
                 DELETE
               </Button>
