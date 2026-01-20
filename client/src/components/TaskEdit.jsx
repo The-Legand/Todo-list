@@ -12,12 +12,15 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { triggerTaskRefreshAtom, tasksAtom } from "../helpers/atoms";
 import {useAtomValue, useSetAtom} from "jotai"
+import EditIcon from "@mui/icons-material/Edit";
+
 export default function FormDialog({taskId}) {
   const [clickedCoordinates, setClickedCoordinates] = useState(null);
   const [open, setOpen] = useState(false);
   const triggerRefresh = useSetAtom(triggerTaskRefreshAtom);
   const tasks = useAtomValue(tasksAtom);
   const requiredTask = tasks.find((task)=>task._id==taskId)
+
   const {
     register,
     handleSubmit,
@@ -57,13 +60,14 @@ export default function FormDialog({taskId}) {
   };
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="outlined" startIcon={<EditIcon/>} onClick={handleClickOpen}>
         Edit
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth
+  maxWidth="md" sx={{ "& .MuiDialog-paper": { height: "80vh" }} }>
         <DialogTitle>Edit task</DialogTitle>
-        <DialogContent>
-          <form id="task-form" onSubmit={handleSubmit(updateTask)}>
+        <DialogContent dividers>
+          <form id="task-form" onSubmit={handleSubmit(updateTask)} style={{display:"flex", flexDirection:"column", gap:16}}>
             <TextField
               className="form-fields"
               label="Task name"
@@ -80,6 +84,7 @@ export default function FormDialog({taskId}) {
               })}
             />
             <p className="errors">{errors.name?.message}</p>              
+            <div>
             <InputLabel id="priority-label">Priority</InputLabel>
               <Controller
               name="priority"
@@ -101,10 +106,13 @@ export default function FormDialog({taskId}) {
                 <MenuItem value={5}>5</MenuItem>
 
               </Select>
+              
   )}/>
             <span className="errors">{errors.priority?.message}</span>
-
+            </div>
+  <div style={{height:360}}>
       <MapView onMapClick={setClickedCoordinates}/>
+          </div>
           </form>
         </DialogContent>
         <DialogActions>

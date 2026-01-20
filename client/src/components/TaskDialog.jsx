@@ -60,10 +60,11 @@ export default function FormDialog() {
       <Button variant="outlined" onClick={handleClickOpen}>
         Create new Task
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md"   sx={{ "& .MuiDialog-paper": { height: "80vh" } }}
+>
         <DialogTitle>Create a new Task</DialogTitle>
-        <DialogContent>
-          <form id="task-form" onSubmit={handleSubmit(createTask)}>
+        <DialogContent dividers>
+          <form id="task-form" onSubmit={handleSubmit(createTask)} style={{display: "flex", flexDirection:"column", gap:16}}>
             <TextField
               className="form-fields"
               label="Task name"
@@ -102,8 +103,9 @@ export default function FormDialog() {
               </Select>
   )}/>
             <span className="errors">{errors.priority?.message}</span>
-
-      <MapView onMapClick={setClickedCoordinates}/>
+        <div style={{ height: 360 }}>
+      <MapView onMapClick={setClickedCoordinates} />
+          </div>
           </form>
         </DialogContent>
         <DialogActions>
